@@ -1,0 +1,3601 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QueueX | Smart Banking Queue Management</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --primary:#2563eb;
+    --primary-dark:#1d4ed8;
+    --purple:#7c3aed;
+    --success:#16a34a;
+    --danger:#dc2626;
+    --warning:#f59e0b;
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#64748b;
+    --border:#e2e8f0;
+}
+
+body.dark{
+    --bg:#0b1120;
+    --card:#111827;
+    --text:#f8fafc;
+    --muted:#94a3b8;
+    --border:#263244;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    transition:.3s;
+}
+
+/* NAVBAR */
+
+.navbar{
+    height:72px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 5%;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:22px;
+    font-weight:800;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    color:white;
+    background:linear-gradient(135deg,var(--primary),var(--purple));
+}
+
+.nav-actions{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+}
+
+.nav-btn{
+    padding:9px 12px;
+    border-radius:9px;
+    border:1px solid transparent;
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+}
+
+.nav-btn:hover{
+    background:var(--bg);
+    border-color:var(--border);
+}
+
+/* HERO */
+
+.hero{
+    padding:60px 5% 35px;
+    background:
+    radial-gradient(circle at 80% 20%,rgba(37,99,235,.16),transparent 30%),
+    var(--bg);
+}
+
+.hero-grid{
+    max-width:1250px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:1.4fr .8fr;
+    gap:40px;
+    align-items:center;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 14px;
+    border-radius:30px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(40px,6vw,68px);
+    line-height:1.03;
+    margin-bottom:20px;
+}
+
+.hero h1 span{
+    color:var(--primary);
+}
+
+.hero p{
+    max-width:680px;
+    color:var(--muted);
+    line-height:1.7;
+    font-size:17px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:28px;
+}
+
+/* BUTTONS */
+
+.primary{
+    background:var(--primary);
+    color:white;
+    padding:13px 19px;
+    border-radius:10px;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.primary:hover{
+    background:var(--primary-dark);
+}
+
+.secondary{
+    background:var(--card);
+    color:var(--text);
+    padding:13px 19px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.danger{
+    background:var(--danger);
+    color:white;
+}
+
+/* LIVE CARD */
+
+.live-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:25px;
+    box-shadow:0 20px 50px rgba(15,23,42,.08);
+}
+
+.live-header{
+    display:flex;
+    justify-content:space-between;
+}
+
+.live{
+    color:var(--success);
+    font-weight:bold;
+    font-size:13px;
+}
+
+.big-token{
+    font-size:58px;
+    font-weight:800;
+    color:var(--primary);
+    margin:15px 0;
+}
+
+.progress{
+    width:100%;
+    height:9px;
+    background:var(--border);
+    border-radius:20px;
+    overflow:hidden;
+    margin:18px 0;
+}
+
+.progress div{
+    height:100%;
+    background:linear-gradient(90deg,var(--primary),var(--purple));
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:25px 5% 60px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+}
+
+.stat{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+}
+
+.stat-icon{
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    background:#eff6ff;
+    border-radius:10px;
+    margin-bottom:12px;
+}
+
+.stat h3{
+    font-size:28px;
+}
+
+.stat p{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:5px;
+}
+
+/* TABS */
+
+.dashboard-tabs{
+    display:flex;
+    gap:8px;
+    margin:30px 0 20px;
+    overflow:auto;
+}
+
+.tab{
+    padding:10px 18px;
+    border-radius:9px;
+    background:var(--card);
+    color:var(--muted);
+    border:1px solid var(--border);
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.tab.active{
+    background:var(--primary);
+    color:white;
+}
+
+/* PANELS */
+
+.panel{
+    display:none;
+}
+
+.panel.active{
+    display:block;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+}
+
+.card h3{
+    margin-bottom:18px;
+}
+
+/* FORM */
+
+.form-group{
+    margin-bottom:16px;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+    background:var(--bg);
+    color:var(--text);
+}
+
+input:focus,select:focus{
+    border-color:var(--primary);
+}
+
+.full{
+    width:100%;
+}
+
+.priority-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:13px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    margin-bottom:14px;
+}
+
+.priority-box input{
+    width:auto;
+}
+
+/* TOKEN */
+
+.token-result{
+    display:none;
+    text-align:center;
+    padding:22px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#eff6ff,#eef2ff);
+}
+
+.token-result.show{
+    display:block;
+}
+
+.token-number{
+    color:var(--primary);
+    font-size:48px;
+    font-weight:800;
+    margin:8px 0;
+}
+
+.eta{
+    color:var(--muted);
+    margin:8px 0 18px;
+}
+
+/* QR */
+
+.qr{
+    width:120px;
+    height:120px;
+    margin:15px auto;
+    background:white;
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:2px;
+    padding:8px;
+}
+
+.qr span{
+    background:#111;
+}
+
+/* SMART BOX */
+
+.smart-box{
+    padding:14px;
+    border-left:4px solid var(--primary);
+    background:#eff6ff;
+    color:#1e3a8a;
+    border-radius:8px;
+    margin-top:15px;
+    font-size:13px;
+}
+
+/* VOICE */
+
+.voice-panel{
+    background:
+    linear-gradient(135deg,#eff6ff,#f5f3ff);
+    border:1px solid #bfdbfe;
+}
+
+.voice-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
+
+.voice-icon{
+    width:50px;
+    height:50px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--primary),var(--purple));
+    color:white;
+    display:grid;
+    place-items:center;
+    font-size:23px;
+}
+
+.voice-status{
+    padding:8px 12px;
+    border-radius:20px;
+    background:#dcfce7;
+    color:#166534;
+    font-size:12px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.voice-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.range-value{
+    color:var(--primary);
+    font-weight:bold;
+}
+
+/* TABLE */
+
+.table-wrap{
+    overflow:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th,td{
+    padding:14px;
+    text-align:left;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+th{
+    color:var(--muted);
+}
+
+.status{
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.waiting{
+    background:#fef3c7;
+    color:#92400e;
+}
+
+.serving{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.completed{
+    background:#dbeafe;
+    color:#1e40af;
+}
+
+.skipped,.cancelled{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.priority{
+    background:#f3e8ff;
+    color:#7e22ce;
+}
+
+.action-btn{
+    padding:7px 10px;
+    border-radius:7px;
+    border:none;
+    font-size:11px;
+    cursor:pointer;
+    margin:2px;
+}
+
+.call{
+    background:var(--primary);
+    color:white;
+}
+
+.complete{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.skip{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+/* COUNTERS */
+
+.counter-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.counter{
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    background:var(--bg);
+}
+
+.counter.active{
+    border:2px solid var(--primary);
+}
+
+.counter-number{
+    font-size:23px;
+    font-weight:800;
+    margin:10px 0;
+}
+
+/* CHART */
+
+.chart{
+    display:flex;
+    align-items:end;
+    height:190px;
+    gap:10px;
+    padding-top:20px;
+}
+
+.bar{
+    flex:1;
+    background:linear-gradient(to top,var(--primary),var(--purple));
+    border-radius:7px 7px 0 0;
+    position:relative;
+}
+
+.bar span{
+    position:absolute;
+    bottom:-24px;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:10px;
+    color:var(--muted);
+}
+
+/* TOAST */
+
+.toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#0f172a;
+    color:white;
+    padding:15px 20px;
+    border-radius:10px;
+    transform:translateY(120px);
+    opacity:0;
+    transition:.3s;
+    z-index:999;
+    max-width:350px;
+}
+
+.toast.show{
+    transform:translateY(0);
+    opacity:1;
+}
+
+/* ANNOUNCEMENT DISPLAY */
+
+.announcement{
+    padding:20px;
+    border-radius:15px;
+    background:#0f172a;
+    color:white;
+    margin-top:18px;
+    text-align:center;
+    display:none;
+}
+
+.announcement.show{
+    display:block;
+}
+
+.announcement-token{
+    font-size:38px;
+    color:#60a5fa;
+    font-weight:800;
+    margin:7px;
+}
+
+/* EMPTY */
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+    font-size:13px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+    .hero-grid,
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .counter-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:550px){
+
+    .navbar{
+        height:auto;
+        padding:15px 4%;
+        gap:10px;
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .hero{
+        padding:40px 4%;
+    }
+
+    .container{
+        padding:20px 4% 40px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .voice-controls{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            Q
+        </div>
+
+        QueueX
+
+    </div>
+
+
+    <div class="nav-actions">
+
+        <button class="nav-btn"
+                onclick="toggleTheme()">
+            🌙 Theme
+        </button>
+
+        <button class="nav-btn"
+                onclick="toggleLanguage()">
+            🌐 EN / தமிழ்
+        </button>
+
+        <button class="nav-btn"
+                onclick="showPanel('customer')">
+            👤 Customer
+        </button>
+
+        <button class="nav-btn"
+                onclick="showPanel('staff')">
+            👨‍💼 Staff
+        </button>
+
+        <button class="nav-btn"
+                onclick="showPanel('admin')">
+            📊 Admin
+        </button>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+<div class="hero-grid">
+
+<div>
+
+    <div class="badge">
+        🔊 SMART VOICE-ENABLED BANKING QUEUE
+    </div>
+
+    <h1>
+        Skip the Queue.<br>
+        <span>Save Your Time.</span>
+    </h1>
+
+    <p>
+        QueueX provides digital tokens, intelligent queue
+        management, live customer tracking, smart counter
+        allocation and automated voice announcements.
+    </p>
+
+
+    <div class="hero-buttons">
+
+        <button class="primary"
+                onclick="showPanel('customer')">
+
+            🎫 Get My Token
+
+        </button>
+
+
+        <button class="secondary"
+                onclick="showPanel('staff')">
+
+            📢 Staff Dashboard
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="live-card">
+
+    <div class="live-header">
+
+        <strong>
+            🔊 Live Queue
+        </strong>
+
+        <span class="live">
+            ● LIVE
+        </span>
+
+    </div>
+
+    <small>
+        Currently Serving
+    </small>
+
+    <div class="big-token"
+         id="heroToken">
+
+        A100
+
+    </div>
+
+    <div class="progress">
+
+        <div id="heroProgress"
+             style="width:40%">
+        </div>
+
+    </div>
+
+    <small id="heroText">
+        0 people are currently waiting
+    </small>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<main class="container">
+
+
+<!-- ================= STATS ================= -->
+
+<div class="stats">
+
+<div class="stat">
+
+<div class="stat-icon">
+    👥
+</div>
+
+<h3 id="statWaiting">
+    0
+</h3>
+
+<p>
+    People Waiting
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    ⏱️
+</div>
+
+<h3 id="statWait">
+    0m
+</h3>
+
+<p>
+    Average Waiting Time
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    ✅
+</div>
+
+<h3 id="statServed">
+    0
+</h3>
+
+<p>
+    Customers Served
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    🏦
+</div>
+
+<h3>
+    3
+</h3>
+
+<p>
+    Active Counters
+</p>
+
+</div>
+
+</div>
+
+
+
+<!-- ================= TABS ================= -->
+
+<div class="dashboard-tabs">
+
+<button class="tab active"
+        id="tabCustomer"
+        onclick="showPanel('customer')">
+
+    👤 Customer Portal
+
+</button>
+
+
+<button class="tab"
+        id="tabStaff"
+        onclick="showPanel('staff')">
+
+    👨‍💼 Staff Control
+
+</button>
+
+
+<button class="tab"
+        id="tabAdmin"
+        onclick="showPanel('admin')">
+
+    📊 Admin Analytics
+
+</button>
+
+</div>
+
+
+
+<!-- ======================================================
+CUSTOMER PANEL
+====================================================== -->
+
+<section id="customer"
+         class="panel active">
+
+
+<div class="grid">
+
+
+<!-- TOKEN GENERATOR -->
+
+<div class="card">
+
+<h3>
+    🎫 Generate Smart Token
+</h3>
+
+
+<div class="form-group">
+
+<label>
+    Customer Name
+</label>
+
+<input id="customerName"
+       placeholder="Enter your name">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+    Select Service
+</label>
+
+<select id="service">
+
+<option value="Cash Deposit">
+    💰 Cash Deposit
+</option>
+
+<option value="Cash Withdrawal">
+    💸 Cash Withdrawal
+</option>
+
+<option value="Account Opening">
+    👤 Account Opening
+</option>
+
+<option value="Loan Enquiry">
+    🏠 Loan Enquiry
+</option>
+
+<option value="Passbook">
+    📘 Passbook / Other
+</option>
+
+</select>
+
+</div>
+
+
+<div class="priority-box">
+
+<input type="checkbox"
+       id="priority">
+
+<div>
+
+<label style="margin:0">
+    Priority Assistance
+</label>
+
+<small>
+    Senior citizen / accessibility assistance
+</small>
+
+</div>
+
+</div>
+
+
+<button class="primary full"
+        onclick="generateToken()">
+
+    ⚡ Generate My Token
+
+</button>
+
+
+<div id="smartRecommendation"
+     class="smart-box"
+     style="display:none">
+
+</div>
+
+</div>
+
+
+
+<!-- TOKEN CARD -->
+
+<div class="card">
+
+<h3>
+    📱 My Digital Token
+</h3>
+
+
+<div id="tokenEmpty"
+     class="empty">
+
+    Generate a token to see your
+    queue position.
+
+</div>
+
+
+<div id="tokenResult"
+     class="token-result">
+
+
+<small>
+    YOUR TOKEN NUMBER
+</small>
+
+
+<div class="token-number"
+     id="myToken">
+
+    A100
+
+</div>
+
+
+<div id="myService">
+    Service
+</div>
+
+
+<div id="qr"
+     class="qr">
+</div>
+
+
+<strong id="myPosition">
+    Position: -
+</strong>
+
+
+<div class="eta"
+     id="myEta">
+
+    Estimated waiting time: -
+
+</div>
+
+
+<button class="secondary"
+        onclick="cancelMyToken()">
+
+    ❌ Cancel Token
+
+</button>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ================= VOICE CENTER ================= -->
+
+<div class="section-title"
+     style="margin-top:25px">
+
+<h2>
+    🔊 Voice Announcement Center
+</h2>
+
+</div>
+
+
+<div class="card voice-panel">
+
+<div class="voice-header">
+
+<div class="voice-icon">
+    🔊
+</div>
+
+<div>
+
+<h3 style="margin-bottom:4px">
+    Automated Queue Announcer
+</h3>
+
+<span class="voice-status"
+      id="voiceStatus">
+
+    Voice Ready
+
+</span>
+
+</div>
+
+</div>
+
+
+<div class="voice-controls">
+
+
+<div>
+
+<label>
+    Announcement Language
+</label>
+
+<select id="voiceLanguage">
+
+<option value="en-IN">
+    English (India)
+</option>
+
+<option value="ta-IN">
+    தமிழ் (Tamil)
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>
+    Voice Speed:
+    <span class="range-value"
+          id="speedValue">
+        0.9
+    </span>
+</label>
+
+<input type="range"
+       id="voiceSpeed"
+       min="0.5"
+       max="1.5"
+       value="0.9"
+       step="0.1"
+       oninput="updateSpeed()">
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<div class="hero-buttons">
+
+<button class="primary"
+        onclick="testVoice()">
+
+    🔊 Test Voice
+
+</button>
+
+
+<button class="secondary"
+        onclick="repeatAnnouncement()">
+
+    🔁 Repeat Last Announcement
+
+</button>
+
+</div>
+
+
+<div id="announcement"
+     class="announcement">
+
+    <small>
+        NOW ANNOUNCING
+    </small>
+
+    <div class="announcement-token"
+         id="announcementToken">
+
+        A100
+
+    </div>
+
+    <div id="announcementText">
+        Voice announcement
+    </div>
+
+</div>
+
+</div>
+
+
+
+<!-- CUSTOMER QUEUE -->
+
+<div class="section-title">
+
+<div>
+
+<h2>
+    📍 Live Queue
+</h2>
+
+<p>
+    Real-time queue status
+</p>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+    Token
+</th>
+
+<th>
+    Service
+</th>
+
+<th>
+    Priority
+</th>
+
+<th>
+    Status
+</th>
+
+<th>
+    ETA
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="customerQueue">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- ======================================================
+STAFF PANEL
+====================================================== -->
+
+<section id="staff"
+         class="panel">
+
+
+<div class="section-title">
+
+<div>
+
+<h2>
+    👨‍💼 Staff Control Center
+</h2>
+
+<p>
+    Manage queue and voice announcements
+</p>
+
+</div>
+
+
+<button class="primary"
+        onclick="callNext()">
+
+    📢 Call Next Customer
+
+</button>
+
+</div>
+
+
+
+<!-- COUNTERS -->
+
+<div class="card">
+
+<h3>
+    🏦 Counter Management
+</h3>
+
+
+<div class="counter-grid">
+
+
+<div class="counter active"
+     id="counterBox1">
+
+<small>
+    COUNTER 1
+</small>
+
+<div class="counter-number"
+     id="counter1">
+
+    Available
+
+</div>
+
+<button class="secondary full"
+        onclick="setCounter(1)">
+
+    Select Counter 1
+
+</button>
+
+</div>
+
+
+<div class="counter"
+     id="counterBox2">
+
+<small>
+    COUNTER 2
+</small>
+
+<div class="counter-number"
+     id="counter2">
+
+    Available
+
+</div>
+
+<button class="secondary full"
+        onclick="setCounter(2)">
+
+    Select Counter 2
+
+</button>
+
+</div>
+
+
+<div class="counter"
+     id="counterBox3">
+
+<small>
+    COUNTER 3
+</small>
+
+<div class="counter-number"
+     id="counter3">
+
+    Available
+
+</div>
+
+<button class="secondary full"
+        onclick="setCounter(3)">
+
+    Select Counter 3
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<br>
+
+
+
+<!-- VOICE STAFF CONTROL -->
+
+<div class="card voice-panel">
+
+<h3>
+    📢 Staff Voice Announcement
+</h3>
+
+<p style="color:var(--muted);line-height:1.6">
+
+When a customer is called, QueueX automatically announces
+the token number and counter number through the branch
+computer's speaker.
+
+</p>
+
+
+<div class="smart-box">
+
+<strong>
+    Example:
+</strong>
+
+<br>
+
+“Attention please. Token A105,
+please proceed to Counter 2.”
+
+</div>
+
+<br>
+
+
+<button class="primary"
+        onclick="callNext()">
+
+    🔊 Call Next + Announce
+
+</button>
+
+
+<button class="secondary"
+        onclick="announceNext()">
+
+    📢 Announce Next Customer
+
+</button>
+
+</div>
+
+
+
+<br>
+
+
+
+<!-- STAFF QUEUE -->
+
+<div class="card">
+
+<h3>
+    📋 Queue Management
+</h3>
+
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+    Token
+</th>
+
+<th>
+    Customer
+</th>
+
+<th>
+    Service
+</th>
+
+<th>
+    Priority
+</th>
+
+<th>
+    Status
+</th>
+
+<th>
+    Action
+</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="staffQueue">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- ======================================================
+ADMIN PANEL
+====================================================== -->
+
+<section id="admin"
+         class="panel">
+
+
+<div class="section-title">
+
+<div>
+
+<h2>
+    📊 Admin Analytics
+</h2>
+
+<p>
+    Branch performance and smart queue insights
+</p>
+
+</div>
+
+
+<button class="secondary"
+        onclick="resetDemo()">
+
+    🔄 Reset Demo
+
+</button>
+
+</div>
+
+
+
+<div class="stats">
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    📈
+</div>
+
+<h3 id="analyticsServed">
+    0
+</h3>
+
+<p>
+    Total Served
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    ⚡
+</div>
+
+<h3>
+    4.8m
+</h3>
+
+<p>
+    Avg Service Time
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    😊
+</div>
+
+<h3>
+    94%
+</h3>
+
+<p>
+    Customer Satisfaction
+</p>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-icon">
+    🔊
+</div>
+
+<h3>
+    ON
+</h3>
+
+<p>
+    Voice Announcer
+</p>
+
+</div>
+
+</div>
+
+
+
+<br>
+
+
+
+<div class="grid">
+
+
+<div class="card">
+
+<h3>
+    📈 Hourly Customer Traffic
+</h3>
+
+
+<div class="chart">
+
+<div class="bar"
+     style="height:35%">
+<span>
+9AM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:50%">
+<span>
+10AM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:75%">
+<span>
+11AM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:95%">
+<span>
+12PM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:65%">
+<span>
+1PM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:45%">
+<span>
+2PM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:80%">
+<span>
+3PM
+</span>
+</div>
+
+
+<div class="bar"
+     style="height:55%">
+<span>
+4PM
+</span>
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>
+    🥇 Popular Services
+</h3>
+
+
+<p>
+    💰 Cash Deposit
+</p>
+
+<div class="progress">
+<div style="width:82%"></div>
+</div>
+
+
+<p>
+    💸 Cash Withdrawal
+</p>
+
+<div class="progress">
+<div style="width:70%"></div>
+</div>
+
+
+<p>
+    👤 Account Opening
+</p>
+
+<div class="progress">
+<div style="width:45%"></div>
+</div>
+
+
+<p>
+    🏠 Loan Enquiry
+</p>
+
+<div class="progress">
+<div style="width:30%"></div>
+</div>
+
+</div>
+
+</div>
+
+
+
+<br>
+
+
+
+<div class="card">
+
+<h3>
+    🧠 Smart Queue Insights
+</h3>
+
+
+<div class="smart-box">
+
+<strong>
+    Peak Hour Prediction
+</strong>
+
+<br>
+
+The system identifies 11 AM – 1 PM
+as a high-demand period.
+
+</div>
+
+
+<div class="smart-box">
+
+<strong>
+    Smart Counter Recommendation
+</strong>
+
+<br>
+
+QueueX can recommend moving additional staff
+to services with the highest waiting demand.
+
+</div>
+
+
+<div class="smart-box">
+
+<strong>
+    🔊 Voice Accessibility
+</strong>
+
+<br>
+
+Voice announcements help customers who may not
+be continuously watching the queue screen.
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+</main>
+
+
+
+<footer>
+
+<strong>
+    QueueX
+</strong>
+ — Smart Digital Banking Queue Management
+
+<br><br>
+
+🔊 Voice Enabled • 🧠 Smart Queue • 📊 Analytics • 📱 Digital Token
+
+<br><br>
+
+Competition Prototype
+
+</footer>
+
+
+
+<div id="toast"
+     class="toast">
+
+    Notification
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
+
+let queue =
+JSON.parse(
+    localStorage.getItem("queueXQueue")
+) || [];
+
+
+let tokenNumber =
+parseInt(
+    localStorage.getItem("queueXToken")
+) || 100;
+
+
+let served =
+parseInt(
+    localStorage.getItem("queueXServed")
+) || 0;
+
+
+let currentToken =
+localStorage.getItem("queueXCurrent")
+|| "A100";
+
+
+let selectedCounter = 1;
+
+let myToken = null;
+
+let lastAnnouncement = "";
+
+let tamilMode = false;
+
+
+
+/* =====================================================
+   SAVE DATA
+===================================================== */
+
+function saveData(){
+
+localStorage.setItem(
+    "queueXQueue",
+    JSON.stringify(queue)
+);
+
+localStorage.setItem(
+    "queueXToken",
+    tokenNumber
+);
+
+localStorage.setItem(
+    "queueXServed",
+    served
+);
+
+localStorage.setItem(
+    "queueXCurrent",
+    currentToken
+);
+
+}
+
+
+
+/* =====================================================
+   PANEL NAVIGATION
+===================================================== */
+
+function showPanel(panel){
+
+document.querySelectorAll(".panel")
+.forEach(p =>
+    p.classList.remove("active")
+);
+
+
+document.getElementById(panel)
+.classList.add("active");
+
+
+document.querySelectorAll(".tab")
+.forEach(t =>
+    t.classList.remove("active")
+);
+
+
+if(panel==="customer")
+document.getElementById("tabCustomer")
+.classList.add("active");
+
+
+if(panel==="staff")
+document.getElementById("tabStaff")
+.classList.add("active");
+
+
+if(panel==="admin")
+document.getElementById("tabAdmin")
+.classList.add("active");
+
+}
+
+
+
+/* =====================================================
+   GENERATE TOKEN
+===================================================== */
+
+function generateToken(){
+
+const name =
+document.getElementById("customerName")
+.value.trim();
+
+
+const service =
+document.getElementById("service")
+.value;
+
+
+const priority =
+document.getElementById("priority")
+.checked;
+
+
+if(!name){
+
+showToast(
+    "Please enter your name first."
+);
+
+return;
+
+}
+
+
+tokenNumber++;
+
+
+const token =
+"A" + tokenNumber;
+
+
+const customer = {
+
+id:Date.now(),
+
+token:token,
+
+name:name,
+
+service:service,
+
+priority:priority,
+
+status:"Waiting",
+
+created:Date.now(),
+
+counter:null
+
+};
+
+
+queue.push(customer);
+
+
+/* PRIORITY SORT */
+
+queue.sort((a,b)=>{
+
+if(a.priority && !b.priority)
+return -1;
+
+if(!a.priority && b.priority)
+return 1;
+
+return a.created-b.created;
+
+});
+
+
+myToken = token;
+
+
+saveData();
+
+
+showCustomerToken(customer);
+
+
+smartRecommendation(service);
+
+
+showToast(
+    "🎫 Token " + token +
+    " generated successfully."
+);
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   SHOW CUSTOMER TOKEN
+===================================================== */
+
+function showCustomerToken(customer){
+
+document.getElementById("tokenEmpty")
+.style.display="none";
+
+
+document.getElementById("tokenResult")
+.classList.add("show");
+
+
+document.getElementById("myToken")
+.textContent =
+customer.token;
+
+
+document.getElementById("myService")
+.textContent =
+customer.service;
+
+
+createQR(customer.token);
+
+
+updateMyPosition();
+
+}
+
+
+
+/* =====================================================
+   QR SIMULATION
+===================================================== */
+
+function createQR(text){
+
+const qr =
+document.getElementById("qr");
+
+
+qr.innerHTML="";
+
+
+let seed=0;
+
+
+for(let i=0;i<text.length;i++){
+
+seed +=
+text.charCodeAt(i);
+
+}
+
+
+for(let i=0;i<100;i++){
+
+const cell =
+document.createElement("span");
+
+
+if(
+    (i*seed+i*i)%7 < 3
+){
+
+cell.style.background="#111";
+
+}else{
+
+cell.style.background="#fff";
+
+}
+
+
+qr.appendChild(cell);
+
+}
+
+}
+
+
+
+/* =====================================================
+   SMART RECOMMENDATION
+===================================================== */
+
+function smartRecommendation(service){
+
+let message;
+
+
+if(service==="Cash Deposit"){
+
+message =
+"🧠 Smart Recommendation: Counter 1 currently has a suitable queue for Cash Deposit.";
+
+}
+
+else if(service==="Cash Withdrawal"){
+
+message =
+"🧠 Smart Recommendation: Counter 2 is recommended for Cash Withdrawal.";
+
+}
+
+else if(service==="Loan Enquiry"){
+
+message =
+"🧠 Smart Recommendation: Loan Enquiry should be handled by the specialist counter.";
+
+}
+
+else{
+
+message =
+"🧠 Smart Recommendation: Counter 3 currently has a lower queue load.";
+
+}
+
+
+const box =
+document.getElementById(
+    "smartRecommendation"
+);
+
+
+box.textContent = message;
+
+box.style.display="block";
+
+}
+
+
+
+/* =====================================================
+   MY POSITION
+===================================================== */
+
+function updateMyPosition(){
+
+if(!myToken)
+return;
+
+
+const active =
+queue.filter(q =>
+    q.status==="Waiting"
+);
+
+
+const index =
+active.findIndex(q =>
+    q.token===myToken
+);
+
+
+if(index===-1){
+
+document.getElementById(
+    "myPosition"
+).textContent =
+"Your token is being processed.";
+
+
+document.getElementById(
+    "myEta"
+).textContent =
+"Please watch the announcement screen.";
+
+return;
+
+}
+
+
+const position =
+index+1;
+
+
+const eta =
+position*5;
+
+
+document.getElementById(
+    "myPosition"
+).textContent =
+"Queue Position: #" +
+position;
+
+
+document.getElementById(
+    "myEta"
+).textContent =
+"Estimated waiting time: " +
+eta +
+" minutes";
+
+}
+
+
+
+/* =====================================================
+   CANCEL TOKEN
+===================================================== */
+
+function cancelMyToken(){
+
+if(!myToken)
+return;
+
+
+const customer =
+queue.find(
+    q => q.token===myToken
+);
+
+
+if(!customer)
+return;
+
+
+customer.status =
+"Cancelled";
+
+
+saveData();
+
+
+showToast(
+    "Token " +
+    myToken +
+    " cancelled."
+);
+
+
+myToken=null;
+
+
+document.getElementById(
+    "tokenResult"
+).classList.remove("show");
+
+
+document.getElementById(
+    "tokenEmpty"
+).style.display="block";
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   VOICE ENGINE
+===================================================== */
+
+/*
+
+Browser Web Speech API
+
+No API key required.
+
+*/
+
+function speak(text,language=null){
+
+if(!("speechSynthesis" in window)){
+
+showToast(
+    "Voice announcements are not supported by this browser."
+);
+
+return;
+
+}
+
+
+/* Stop previous announcement */
+
+window.speechSynthesis.cancel();
+
+
+const utterance =
+new SpeechSynthesisUtterance(text);
+
+
+const selectedLanguage =
+language ||
+document.getElementById(
+    "voiceLanguage"
+).value;
+
+
+utterance.lang =
+selectedLanguage;
+
+
+utterance.rate =
+parseFloat(
+    document.getElementById(
+        "voiceSpeed"
+    ).value
+);
+
+
+utterance.pitch=1;
+
+utterance.volume=1;
+
+
+/* Find suitable voice */
+
+const voices =
+window.speechSynthesis.getVoices();
+
+
+let selectedVoice =
+voices.find(
+    voice =>
+    voice.lang.toLowerCase()
+    ===
+    selectedLanguage.toLowerCase()
+);
+
+
+if(!selectedVoice){
+
+selectedVoice =
+voices.find(
+    voice =>
+    voice.lang
+    .toLowerCase()
+    .startsWith(
+        selectedLanguage
+        .split("-")[0]
+        .toLowerCase()
+    )
+);
+
+}
+
+
+if(selectedVoice){
+
+utterance.voice =
+selectedVoice;
+
+}
+
+
+document.getElementById(
+    "voiceStatus"
+).textContent =
+"🔊 Speaking...";
+
+
+utterance.onend =
+function(){
+
+document.getElementById(
+    "voiceStatus"
+).textContent =
+"Voice Ready";
+
+};
+
+
+utterance.onerror =
+function(){
+
+document.getElementById(
+    "voiceStatus"
+).textContent =
+"Voice Error";
+
+};
+
+
+window.speechSynthesis.speak(
+    utterance
+);
+
+}
+
+
+
+/* =====================================================
+   MAIN ANNOUNCEMENT
+===================================================== */
+
+function announceCustomer(
+    customer,
+    counter
+){
+
+let message;
+
+
+const language =
+document.getElementById(
+    "voiceLanguage"
+).value;
+
+
+/* Tamil */
+
+if(language==="ta-IN"){
+
+message =
+"கவனத்திற்கு. டோக்கன் " +
+customer.token +
+". தயவுசெய்து கவுண்டர் " +
+counter +
+" க்கு செல்லவும்.";
+
+}else{
+
+message =
+"Attention please. Token " +
+customer.token +
+", please proceed to Counter " +
+counter +
+".";
+
+}
+
+
+lastAnnouncement = message;
+
+
+/* Display */
+
+document.getElementById(
+    "announcementToken"
+).textContent =
+customer.token;
+
+
+document.getElementById(
+    "announcementText"
+).textContent =
+message;
+
+
+document.getElementById(
+    "announcement"
+).classList.add("show");
+
+
+/* Speak */
+
+speak(
+    message,
+    language
+);
+
+}
+
+
+
+/* =====================================================
+   CALL NEXT CUSTOMER
+===================================================== */
+
+function callNext(){
+
+const next =
+queue.find(
+    q => q.status==="Waiting"
+);
+
+
+if(!next){
+
+showToast(
+    "There are no customers waiting."
+);
+
+announceNoCustomers();
+
+return;
+
+}
+
+
+/* Move existing serving customer */
+
+queue.forEach(q=>{
+
+if(q.status==="Serving"){
+
+q.status="Completed";
+
+served++;
+
+}
+
+});
+
+
+next.status =
+"Serving";
+
+
+next.counter =
+selectedCounter;
+
+
+currentToken =
+next.token;
+
+
+saveData();
+
+
+/* Voice Announcement */
+
+announceCustomer(
+    next,
+    selectedCounter
+);
+
+
+showToast(
+    "📢 " +
+    next.token +
+    " called to Counter " +
+    selectedCounter
+);
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   ANNOUNCE NEXT WITHOUT CALLING
+===================================================== */
+
+function announceNext(){
+
+const next =
+queue.find(
+    q => q.status==="Waiting"
+);
+
+
+if(!next){
+
+announceNoCustomers();
+
+return;
+
+}
+
+
+let message;
+
+
+const language =
+document.getElementById(
+    "voiceLanguage"
+).value;
+
+
+if(language==="ta-IN"){
+
+message =
+"அடுத்த டோக்கன் " +
+next.token +
+". தயவுசெய்து தயாராக இருக்கவும்.";
+
+}else{
+
+message =
+"Next customer. Token " +
+next.token +
+", please be ready.";
+
+}
+
+
+lastAnnouncement =
+message;
+
+
+document.getElementById(
+    "announcementToken"
+).textContent =
+next.token;
+
+
+document.getElementById(
+    "announcementText"
+).textContent =
+message;
+
+
+document.getElementById(
+    "announcement"
+).classList.add("show");
+
+
+speak(
+    message,
+    language
+);
+
+}
+
+
+
+/* =====================================================
+   NO CUSTOMER ANNOUNCEMENT
+===================================================== */
+
+function announceNoCustomers(){
+
+const language =
+document.getElementById(
+    "voiceLanguage"
+).value;
+
+
+let message;
+
+
+if(language==="ta-IN"){
+
+message =
+"தற்போது காத்திருக்கும் வாடிக்கையாளர்கள் யாரும் இல்லை.";
+
+}else{
+
+message =
+"There are currently no customers waiting.";
+
+}
+
+
+lastAnnouncement =
+message;
+
+
+speak(
+    message,
+    language
+);
+
+
+showToast(
+    "Queue is currently empty."
+);
+
+}
+
+
+
+/* =====================================================
+   REPEAT LAST ANNOUNCEMENT
+===================================================== */
+
+function repeatAnnouncement(){
+
+if(!lastAnnouncement){
+
+showToast(
+    "There is no announcement to repeat."
+);
+
+return;
+
+}
+
+
+speak(
+    lastAnnouncement
+);
+
+}
+
+
+
+/* =====================================================
+   TEST VOICE
+===================================================== */
+
+function testVoice(){
+
+const language =
+document.getElementById(
+    "voiceLanguage"
+).value;
+
+
+let message;
+
+
+if(language==="ta-IN"){
+
+message =
+"QueueX குரல் அறிவிப்பு அமைப்பு வெற்றிகரமாக செயல்படுகிறது.";
+
+}else{
+
+message =
+"Welcome to QueueX. The voice announcement system is working successfully.";
+
+}
+
+
+lastAnnouncement =
+message;
+
+
+document.getElementById(
+    "announcementText"
+).textContent =
+message;
+
+
+document.getElementById(
+    "announcement"
+).classList.add("show");
+
+
+speak(
+    message,
+    language
+);
+
+}
+
+
+
+/* =====================================================
+   VOICE SPEED
+===================================================== */
+
+function updateSpeed(){
+
+const speed =
+document.getElementById(
+    "voiceSpeed"
+).value;
+
+
+document.getElementById(
+    "speedValue"
+).textContent =
+speed;
+
+}
+
+
+
+/* =====================================================
+   LOAD BROWSER VOICES
+===================================================== */
+
+if("speechSynthesis" in window){
+
+window.speechSynthesis
+.onvoiceschanged =
+function(){
+
+window.speechSynthesis
+.getVoices();
+
+};
+
+}
+
+
+
+/* =====================================================
+   COMPLETE CUSTOMER
+===================================================== */
+
+function completeToken(id){
+
+const customer =
+queue.find(
+    q => q.id===id
+);
+
+
+if(!customer)
+return;
+
+
+customer.status =
+"Completed";
+
+
+served++;
+
+
+saveData();
+
+
+showToast(
+    "✅ " +
+    customer.token +
+    " completed."
+);
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   SKIP CUSTOMER
+===================================================== */
+
+function skipToken(id){
+
+const customer =
+queue.find(
+    q => q.id===id
+);
+
+
+if(!customer)
+return;
+
+
+customer.status =
+"Skipped";
+
+
+saveData();
+
+
+showToast(
+    "⏭️ " +
+    customer.token +
+    " skipped."
+);
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   CALL SPECIFIC CUSTOMER
+===================================================== */
+
+function callSpecific(id){
+
+const customer =
+queue.find(
+    q => q.id===id
+);
+
+
+if(!customer)
+return;
+
+
+/* Complete currently serving */
+
+queue.forEach(q=>{
+
+if(q.status==="Serving"){
+
+q.status="Completed";
+
+served++;
+
+}
+
+});
+
+
+customer.status =
+"Serving";
+
+
+customer.counter =
+selectedCounter;
+
+
+currentToken =
+customer.token;
+
+
+saveData();
+
+
+announceCustomer(
+    customer,
+    selectedCounter
+);
+
+
+showToast(
+    "📢 " +
+    customer.token +
+    " called."
+);
+
+
+updateUI();
+
+}
+
+
+
+/* =====================================================
+   COUNTER SELECTION
+===================================================== */
+
+function setCounter(number){
+
+selectedCounter =
+number;
+
+
+document.querySelectorAll(
+    ".counter"
+).forEach(
+    c => c.classList.remove("active")
+);
+
+
+document.getElementById(
+    "counterBox"+number
+).classList.add("active");
+
+
+showToast(
+    "Counter " +
+    number +
+    " selected."
+);
+
+}
+
+
+
+/* =====================================================
+   CUSTOMER QUEUE
+===================================================== */
+
+function renderCustomerQueue(){
+
+const body =
+document.getElementById(
+    "customerQueue"
+);
+
+
+body.innerHTML="";
+
+
+if(queue.length===0){
+
+body.innerHTML =
+`
+<tr>
+<td colspan="5"
+class="empty">
+No customers in queue
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+
+queue.slice(0,20)
+.forEach(q=>{
+
+
+const waitingBefore =
+queue.filter(
+    x =>
+    x.status==="Waiting" &&
+    x.created<=q.created
+).length;
+
+
+const eta =
+q.status==="Waiting"
+?
+waitingBefore*5
+:
+0;
+
+
+const tr =
+document.createElement("tr");
+
+
+tr.innerHTML = `
+
+<td>
+<strong>
+${q.token}
+</strong>
+</td>
+
+
+<td>
+${q.service}
+</td>
+
+
+<td>
+
+${
+q.priority
+?
+'<span class="status priority">Priority</span>'
+:
+'Normal'
+}
+
+</td>
+
+
+<td>
+
+<span class="status ${q.status.toLowerCase()}">
+${q.status}
+</span>
+
+</td>
+
+
+<td>
+
+${
+q.status==="Waiting"
+?
+eta+" min"
+:
+"—"
+}
+
+</td>
+
+`;
+
+
+body.appendChild(tr);
+
+});
+
+}
+
+
+
+/* =====================================================
+   STAFF QUEUE
+===================================================== */
+
+function renderStaffQueue(){
+
+const body =
+document.getElementById(
+    "staffQueue"
+);
+
+
+body.innerHTML="";
+
+
+if(queue.length===0){
+
+body.innerHTML =
+`
+<tr>
+<td colspan="6"
+class="empty">
+Queue is empty
+</td>
+</tr>
+`;
+
+return;
+
+}
+
+
+queue.forEach(q=>{
+
+
+let action="";
+
+
+if(q.status==="Waiting"){
+
+action = `
+
+<button
+class="action-btn call"
+onclick="callSpecific(${q.id})">
+
+📢 Call
+
+</button>
+
+`;
+
+}
+
+
+if(q.status==="Serving"){
+
+action = `
+
+<button
+class="action-btn complete"
+onclick="completeToken(${q.id})">
+
+✅ Complete
+
+</button>
+
+
+<button
+class="action-btn skip"
+onclick="skipToken(${q.id})">
+
+⏭️ Skip
+
+</button>
+
+`;
+
+}
+
+
+const tr =
+document.createElement("tr");
+
+
+tr.innerHTML = `
+
+<td>
+<strong>
+${q.token}
+</strong>
+</td>
+
+
+<td>
+${q.name}
+</td>
+
+
+<td>
+${q.service}
+</td>
+
+
+<td>
+
+${
+q.priority
+?
+'<span class="status priority">Priority</span>'
+:
+'Normal'
+}
+
+</td>
+
+
+<td>
+
+<span class="status ${q.status.toLowerCase()}">
+${q.status}
+</span>
+
+</td>
+
+
+<td>
+${action}
+</td>
+
+`;
+
+
+body.appendChild(tr);
+
+});
+
+}
+
+
+
+/* =====================================================
+   UPDATE UI
+===================================================== */
+
+function updateUI(){
+
+const waiting =
+queue.filter(
+    q => q.status==="Waiting"
+);
+
+
+document.getElementById(
+    "statWaiting"
+).textContent =
+waiting.length;
+
+
+document.getElementById(
+    "statWait"
+).textContent =
+(waiting.length*5)+"m";
+
+
+document.getElementById(
+    "statServed"
+).textContent =
+served;
+
+
+document.getElementById(
+    "analyticsServed"
+).textContent =
+served;
+
+
+document.getElementById(
+    "heroToken"
+).textContent =
+currentToken;
+
+
+document.getElementById(
+    "heroText"
+).textContent =
+waiting.length +
+" people are currently waiting";
+
+
+document.getElementById(
+    "heroProgress"
+).style.width =
+Math.min(
+    95,
+    25 + waiting.length*5
+) + "%";
+
+
+/* Counter information */
+
+for(let i=1;i<=3;i++){
+
+const serving =
+queue.find(
+    q =>
+    q.status==="Serving" &&
+    q.counter===i
+);
+
+
+document.getElementById(
+    "counter"+i
+).textContent =
+serving
+?
+serving.token
+:
+"Available";
+
+}
+
+
+renderCustomerQueue();
+
+renderStaffQueue();
+
+updateMyPosition();
+
+}
+
+
+
+/* =====================================================
+   THEME
+===================================================== */
+
+function toggleTheme(){
+
+document.body.classList.toggle(
+    "dark"
+);
+
+
+localStorage.setItem(
+    "queueXDark",
+    document.body.classList.contains("dark")
+);
+
+}
+
+
+
+/* =====================================================
+   LANGUAGE BUTTON
+===================================================== */
+
+function toggleLanguage(){
+
+tamilMode =
+!tamilMode;
+
+
+document.getElementById(
+    "voiceLanguage"
+).value =
+tamilMode
+?
+"ta-IN"
+:
+"en-IN";
+
+
+showToast(
+    tamilMode
+    ?
+    "தமிழ் குரல் அறிவிப்பு தேர்ந்தெடுக்கப்பட்டது."
+    :
+    "English voice announcement selected."
+);
+
+}
+
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(message){
+
+const toast =
+document.getElementById(
+    "toast"
+);
+
+
+toast.textContent =
+message;
+
+
+toast.classList.add("show");
+
+
+setTimeout(
+    ()=>{
+        toast.classList.remove("show");
+    },
+    3000
+);
+
+}
+
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetDemo(){
+
+const confirmReset =
+confirm(
+    "Reset all QueueX demo data?"
+);
+
+
+if(!confirmReset)
+return;
+
+
+queue=[];
+
+tokenNumber=100;
+
+served=0;
+
+currentToken="A100";
+
+myToken=null;
+
+lastAnnouncement="";
+
+
+saveData();
+
+
+document.getElementById(
+    "tokenResult"
+).classList.remove("show");
+
+
+document.getElementById(
+    "tokenEmpty"
+).style.display="block";
+
+
+updateUI();
+
+
+showToast(
+    "🔄 Demo reset successfully."
+);
+
+}
+
+
+
+/* =====================================================
+   RESTORE THEME
+===================================================== */
+
+if(
+localStorage.getItem(
+    "queueXDark"
+)==="true"
+){
+
+document.body.classList.add(
+    "dark"
+);
+
+}
+
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+updateUI();
+
+
+
+/* =====================================================
+   LIVE QUEUE REFRESH
+===================================================== */
+
+setInterval(
+    ()=>{
+        updateUI();
+    },
+    3000
+);
+
+</script>
+
+</body>
+</html>
+```
